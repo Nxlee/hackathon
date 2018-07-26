@@ -1,9 +1,4 @@
 package handler;
-import com.amazon.ask.dispatcher.request.handler.HandlerInput;
-import com.amazon.ask.dispatcher.request.handler.RequestHandler;
-//import com.amazon.ask.model.LaunchRequest;
-import com.amazon.ask.model.Response;
-import com.amazon.ask.request.Predicates;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,35 +6,25 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Optional;
+import java.util.Iterator;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
-import org.json.*;
+import java.util.Map;
 
-public class InvocationHandler implements RequestHandler {
 
-    
-    //Start invocation -> Who do you want to gift to
-    // ->Gives name -> Check match in db (give response accordingly)
-    // Lists wishlist by item ->>waits for response
-    
-    
-    @Override
-    public boolean canHandle(HandlerInput input) {
-        return input.matches(Predicates.intentName("GiftIntent"));
-    }
-    
-    @Override
-    public Optional<Response> handle(HandlerInput input) {
-        String speechText = "sup: ";
-        
+public class test {
+    public static void main(String[] args) {
         try {
             URL url = new URL ("https://maps.googleapis.com/maps/api/place/nearbysearch/json" + 
                     "?location=-33.8670522,151.1957362" + 
                     "&radius=500" + 
                     "&types=food" + 
                     "&name=harbour" + 
-                    "&key= AIzaSyBDW3JksuqUTTTfw7Zl8zwAOgyfPFIzKSk");
+                    "&key=AIzaSyBDW3JksuqUTTTfw7Zl8zwAOgyfPFIzKSk");
             
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("GET");
@@ -62,14 +47,39 @@ public class InvocationHandler implements RequestHandler {
                 content.append(inputline);
             }
             
+            JSONObject obj = new JSONObject(content.toString());
             
+            JSONArray ja = (JSONArray)obj.get("results");
             
-            JSONObject obj = new JSONObject(content);
-            String name = obj.getString("name");
+            System.out.println(ja.length());
             
+            for(int i = 0; i < 3; i++) {
+                JSONObject obj2 = ja.getJSONObject(i);
+                System.out.println(obj2.getString("name"));
+            }
+            /*
+            Iterator itr = ja.iterator();
+            Iterator<Map.Entry> itr2;
+           /* while(itr.hasNext()) {
+                itr2 = ((Map) itr.next()).entrySet().iterator();
+                while(itr2.hasNext()) {
+                    Map.Entry pair = itr2.next();
+                    System.out.println(pair.getKey() + " : " + pair.getValue());
+                }
+            }
+            */
+ 
             
-
+            //System.out.println("done");
+            //System.out.println(name);
+             
+             
+           // System.out.println(content);
             in.close();
+
+            
+      
+            
             
             con.disconnect();
             
@@ -83,11 +93,5 @@ public class InvocationHandler implements RequestHandler {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
-        return input.getResponseBuilder()
-                .withSpeech(speechText)
-                .withSimpleCard("Gift", speechText)
-                .withReprompt(speechText)
-                .build();
     }
 }
