@@ -9,6 +9,12 @@ import java.util.Optional;
 
 public class InvocationHandler implements RequestHandler {
 
+    
+    //Start invocation -> Who do you want to gift to
+    // ->Gives name -> Check match in db (give response accordingly)
+    // Lists wishlist by item ->>waits for response
+    
+    
     @Override
     public boolean canHandle(HandlerInput input) {
         return input.matches(Predicates.intentName("GiftIntent"));
@@ -16,10 +22,13 @@ public class InvocationHandler implements RequestHandler {
     
     @Override
     public Optional<Response> handle(HandlerInput input) {
-        String speechText = "Welcome to the Alexa Skills Kit, you can say hello";
+        String speechText = "Here are some people you can gift to: ";
+        //Query database, append them to end of string
+        
+        
         return input.getResponseBuilder()
                 .withSpeech(speechText)
-                .withSimpleCard("HelloWorld", speechText)
+                .withSimpleCard("Gift", speechText)
                 .withReprompt(speechText)
                 .build();
     }
