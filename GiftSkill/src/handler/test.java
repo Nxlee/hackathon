@@ -53,28 +53,11 @@ public class test {
             
             System.out.println(ja.length());
             
-            for(int i = 0; i < 3; i++) {
+            for(int i = 0; i < 5; i++) {
                 JSONObject obj2 = ja.getJSONObject(i);
                 System.out.println(obj2.getString("name"));
             }
-            /*
-            Iterator itr = ja.iterator();
-            Iterator<Map.Entry> itr2;
-           /* while(itr.hasNext()) {
-                itr2 = ((Map) itr.next()).entrySet().iterator();
-                while(itr2.hasNext()) {
-                    Map.Entry pair = itr2.next();
-                    System.out.println(pair.getKey() + " : " + pair.getValue());
-                }
-            }
-            */
- 
-            
-            //System.out.println("done");
-            //System.out.println(name);
-             
-             
-           // System.out.println(content);
+
             in.close();
 
             

@@ -39,22 +39,11 @@ public class InvocationHandler implements RequestHandler {
                     "&radius=500" + 
                     "&types=food" + 
                     "&name=harbour" + 
-                    "&key= AIzaSyBDW3JksuqUTTTfw7Zl8zwAOgyfPFIzKSk");
+                    "&key=AIzaSyBDW3JksuqUTTTfw7Zl8zwAOgyfPFIzKSk");
             
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("GET");
             
-            /*Map<String, String> parameters = new HashMap<>();
-            parameters.put("param1",  "val");
-            
-            con.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(con.getOutputStream());
-            out.writeBytes(ParameterStringBuilder.getParamString(parameters));
-            out.flush();
-            out.close();
-            */
-            
-            //int status = con.getResponseCode();
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputline;
             StringBuffer content = new StringBuffer();
@@ -62,14 +51,22 @@ public class InvocationHandler implements RequestHandler {
                 content.append(inputline);
             }
             
+            JSONObject obj = new JSONObject(content.toString());
             
+            JSONArray ja = (JSONArray)obj.get("results");
             
-            JSONObject obj = new JSONObject(content);
-            String name = obj.getString("name");
+            System.out.println(ja.length());
             
-            
+            for(int i = 0; i < 3; i++) {
+                JSONObject obj2 = ja.getJSONObject(i);
+                System.out.println(obj2.getString("name"));
+            }
 
             in.close();
+
+            
+      
+            
             
             con.disconnect();
             
@@ -83,6 +80,7 @@ public class InvocationHandler implements RequestHandler {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    
         
         return input.getResponseBuilder()
                 .withSpeech(speechText)
