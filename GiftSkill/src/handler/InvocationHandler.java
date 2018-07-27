@@ -34,7 +34,7 @@ public class InvocationHandler implements RequestHandler {
     
     @Override
     public Optional<Response> handle(HandlerInput input) {
-        String speechText = "Congratulations! It works.";
+        String speechText = "You should try ";
         
         DeviceAddressServiceClient deviceAddressServiceClient = input.getServiceClientFactory().getDeviceAddressService();
         String deviceId = input.getRequestEnvelope().getContext().getSystem().getDevice().getDeviceId();
