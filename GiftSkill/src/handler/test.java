@@ -20,10 +20,9 @@ public class test {
     public static void main(String[] args) {
         try {
             URL url = new URL ("https://maps.googleapis.com/maps/api/place/nearbysearch/json" + 
-                    "?location=-33.8670522,151.1957362" + 
-                    "&radius=500" + 
-                    "&types=food" + 
-                    "&name=harbour" + 
+                    "?location=47.6062,-122.3321" + 
+                    "&radius=50000" + 
+                    "&types=night_club" + 
                     "&key=AIzaSyBDW3JksuqUTTTfw7Zl8zwAOgyfPFIzKSk");
             
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -51,9 +50,9 @@ public class test {
             
             JSONArray ja = (JSONArray)obj.get("results");
             
-            System.out.println(ja.length());
+            //System.out.println(ja.length());
             
-            for(int i = 0; i < 5; i++) {
+            for(int i = 0; i < ja.length() % 7; i++) {
                 JSONObject obj2 = ja.getJSONObject(i);
                 System.out.println(obj2.getString("name"));
             }
