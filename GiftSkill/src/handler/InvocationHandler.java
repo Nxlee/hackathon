@@ -3,6 +3,9 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 //import com.amazon.ask.model.LaunchRequest;
 import com.amazon.ask.model.Response;
+import com.amazon.ask.model.services.ServiceException;
+import com.amazon.ask.model.services.deviceAddress.Address;
+import com.amazon.ask.model.services.deviceAddress.DeviceAddressServiceClient;
 import com.amazon.ask.request.Predicates;
 
 import java.io.BufferedReader;
@@ -26,19 +29,28 @@ public class InvocationHandler implements RequestHandler {
     
     @Override
     public boolean canHandle(HandlerInput input) {
-        return input.matches(Predicates.intentName("GiftIntent"));
+        return input.matches(Predicates.intentName("BoredIntent"));
     }
     
     @Override
     public Optional<Response> handle(HandlerInput input) {
-        String speechText = "sup: ";
+        String speechText = "Congratulations! It works.";
+        
+        DeviceAddressServiceClient deviceAddressServiceClient = input.getServiceClientFactory().getDeviceAddressService();
+        String deviceId = input.getRequestEnvelope().getContext().getSystem().getDevice().getDeviceId();
+        try {
+			Address address = deviceAddressServiceClient.getFullAddress(deviceId);
+			System.out.println(address.toString());
+		} catch (ServiceException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         
         try {
             URL url = new URL ("https://maps.googleapis.com/maps/api/place/nearbysearch/json" + 
                     "?location=-33.8670522,151.1957362" + 
                     "&radius=500" + 
-                    "&types=food" + 
-                    "&name=harbour" + 
+                    "&types=food" +
                     "&key=AIzaSyBDW3JksuqUTTTfw7Zl8zwAOgyfPFIzKSk");
             
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -63,15 +75,7 @@ public class InvocationHandler implements RequestHandler {
             }
 
             in.close();
-
-            
-      
-            
-            
             con.disconnect();
-            
-            
-            
             
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
@@ -84,7 +88,7 @@ public class InvocationHandler implements RequestHandler {
         
         return input.getResponseBuilder()
                 .withSpeech(speechText)
-                .withSimpleCard("Gift", speechText)
+                .withSimpleCard("Bored", speechText)
                 .withReprompt(speechText)
                 .build();
     }
